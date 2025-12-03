@@ -23,6 +23,9 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import android.R.color
+
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +53,8 @@ fun DrawingScreenThingy() {
     // Brush size state
     val strokeWidthState = remember { mutableStateOf(8f) }
 
+    //Brush color state
+    val selectedColor = remember { mutableStateOf(Color.Black) }
     Column(modifier = Modifier.fillMaxSize()) {
 
         // TOOL PANEL
@@ -75,6 +80,29 @@ fun DrawingScreenThingy() {
             }
         }
 
+        // Color portion
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text("Color: ")
+
+            Button(onClick = { selectedColor.value = Color.Black }) {
+                Text("Black")
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(onClick = { selectedColor.value = Color.Red }) {
+                Text("Red")
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Button(onClick = { selectedColor.value = Color.Blue }) {
+                Text("Blue")
+            }
+        }
         // DRAWING AREA
         Canvas(
             modifier = Modifier
@@ -86,7 +114,8 @@ fun DrawingScreenThingy() {
                         val line = Line(
                             start = change.position - dragAmount,
                             end = change.position,
-                            strokeWidth = strokeWidthState.value.dp
+                            strokeWidth = strokeWidthState.value.dp,
+                            color = selectedColor.value
                         )
 
                         lines.add(line)
